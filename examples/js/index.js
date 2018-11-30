@@ -1,10 +1,13 @@
 let c = new SolidChart.Chart({
     container: document.getElementById('container'),
+    xAxis: [
+        {}
+    ],
     series: [
         {
             data: [
                 {
-                    x: new Date(),
+                    x: 200,
                     y: Math.random() * 600
                 }
             ],
