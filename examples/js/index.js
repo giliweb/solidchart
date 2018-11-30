@@ -4,8 +4,8 @@ let c = new SolidChart.Chart({
         {
             data: [
                 {
-                    x: 1,
-                    y: 2
+                    x: new Date(),
+                    y: Math.random() * 600
                 }
             ],
             options: {
@@ -15,3 +15,7 @@ let c = new SolidChart.Chart({
     ]
 })
 console.log(c)
+setInterval(function(){
+    c.series[0].addPoint({x: new Date(), y: Math.random() * 600})
+    ///console.log(c)
+}, 1000)
