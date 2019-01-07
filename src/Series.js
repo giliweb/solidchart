@@ -6,7 +6,8 @@ import moment from 'moment'
 export default class Series {
     constructor(data, settings, chart){
         this.settings = _.merge({
-            type: 'time'
+            type: 'time',
+            color: '#FFFFFF'
         }, settings)
         this.data = data
         this.chart = chart
@@ -32,11 +33,14 @@ export default class Series {
     redraw(){
         this.graphics.clear()
         this.graphics.moveTo(0, 0);
-        this.graphics.lineStyle(1, 0x5090FF, 1);
+        this.graphics.lineStyle(1, this.settings.color, 1);
         let dx = 0
         let dy = 0
-        _.forEach(this.points, (p) => {
-            let x = dx + p.x
+        let chartWidth = this.chart.getWidth()
+        let step = chartWidth / this.points.length
+
+        _.forEach(this.points, (p, i) => {
+            let x = dx + p.x + (step * i)
             let y = dy + p.y
             this.graphics.lineTo(x, y)
         })

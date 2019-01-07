@@ -3,5 +3,5 @@ import Line from './Line'
 
 export {
     Chart,
-    Line
+
 }

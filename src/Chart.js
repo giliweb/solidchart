@@ -6,13 +6,18 @@ import Axis from "./Axis"
 export default class Chart {
 
     constructor(settings) {
-        this.pixi = new PIXI.Application();
+
         this.id = _.uniqueId('chart')
         this.settings = _.merge({
-            width: '800px',
-            height: '600px',
+            width: 1200,
+            height: 900,
             pause: false
         }, settings)
+        this.pixi = new PIXI.Application({
+            width: this.settings.width,
+            height: this.settings.height,
+            antialias: true
+        });
         this.init()
         return this
     }
@@ -28,11 +33,35 @@ export default class Chart {
         }
         this.createCanvas()
 
-        let t = this.pixi.ticker.add(() => {
-            //this.series[0].graphics.x -= .3
-            _.forEach(this.series, e => e.redraw())
-            _.forEach(this.xAxis, e => e.redraw())
-        });
+        let animate = () => {
+            //Determine the amount of time since last frame update
+            this.series[0].graphics.x -= .3
+            this.series[1].graphics.x -= .3
+            this.pixi.renderer.render(this.pixi.stage);
+        }
+
+
+        // Build a worker from an anonymous function body
+        let blobURL = URL.createObjectURL( new Blob([ '(',
+                function(){
+                    this.onmessage = function(e){
+                        setInterval(function(){
+                            postMessage({});
+                        }, e.data);
+                        postMessage({});
+                    };
+
+                }.toString(),
+                ')()' ], { type: 'application/javascript' } ) ),
+            worker = new Worker( blobURL );
+        worker.postMessage(10)
+        worker.onmessage = function(e){
+            animate();
+        };
+
+        // Won't be needing this anymore
+        URL.revokeObjectURL( blobURL );
+
     }
     addSeries(series){
         return _.map(series, (s) => {
@@ -47,5 +76,12 @@ export default class Chart {
     createCanvas(){
         this.settings.container.appendChild(this.pixi.view);
     }
-
+    getWidth(){
+        let fullWidth = this.pixi.renderer.width
+        return fullWidth
+    }
+    getHeight(){
+        let fullHeight = this.pixi.renderer.height
+        return fullHeight
+    }
 }
