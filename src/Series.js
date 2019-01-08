@@ -28,7 +28,7 @@ export default class Series {
     addPoint(point){
         let x
         if(this.settings.type === 'time'){
-            x = moment(point.x)
+            x = moment(point.x).add(1, 'seconds')
         } else {
             x = point.x
         }
@@ -39,7 +39,7 @@ export default class Series {
     redraw(){
         this.graphics.clear()
         this.graphics.moveTo(0, 0);
-        this.graphics.lineStyle(1, this.settings.color, 1);
+
         let dx = 0
         let dy = 0
         let chartWidth = this.chart.getWidth()
@@ -47,14 +47,27 @@ export default class Series {
 
         let currentDateTime = this.chart.settings.currentDateTime
         let totalRangeSpan = this.chart.settings.totalRangeSpan
+        let padding = this.chart.settings.padding
         //x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
 
+        let temp = []
 
         _.forEach(this.points, (p, i) => {
-            let x = -(moment(currentDateTime).diff(moment(p.x)) / (totalRangeSpan * 1000) )  * this.chart.pixi.renderer.width
+            if(moment(p.x).isAfter(moment(currentDateTime).subtract(totalRangeSpan, 'seconds').subtract(padding, 'seconds'))){
+                temp.push(p)
+            }
+        })
+
+        this.points = temp
+
+        //console.log(this.points.length)
+        _.forEach(this.points, (p, i) => {
+            let x = this.chart.pixi.renderer.width - ((moment(currentDateTime).diff(moment(p.x)) / (totalRangeSpan * 1000) )  * this.chart.pixi.renderer.width)
             //console.log(x)
             let y = dy + p.y
             this.graphics.lineTo(x, y)
+            this.graphics.lineStyle(1, this.settings.color, 1);
+
         })
     }
 }

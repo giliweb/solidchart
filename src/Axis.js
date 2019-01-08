@@ -12,7 +12,7 @@ export default class Axis {
 
         }, settings)
         this.chart = chart
-
+        this.labels = {}
         this.init()
         return this
     }
@@ -41,33 +41,42 @@ export default class Axis {
 
         // remove old labels
         //this.labelContainer.clear()
-        this.labelContainer.removeChildren()
+        //this.labelContainer.removeChildren()
 
         let labelValue = moment(fromDate).seconds(0).milliseconds(0)
-        //console.log(labelValue)
-        //return
-        let i = 0
+
+
+        _.forOwn(this.labels, (label, i) => {
+            if(moment(i, 'X').isBefore(moment(currentDateTime).subtract(totalRangeSpan, 'seconds'))){
+                this.labelContainer.removeChild(label)
+                delete this.labels[i]
+            }
+        })
+
         do {
             labelValue.add(labelsInterval, 'seconds')
-            //console.log(labelValue)
+            if(this.labels[labelValue.unix()]){ // this label already exists
+                let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
+                let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
+                this.labels[labelValue.unix()].position.set(x, y)
+            } else {
+                let text = new PIXI.Text(labelValue.format('HH:mm:ss'),{
+                    fontFamily : 'Arial',
+                    fontSize: 24,
+                    fill : 0x000000,
+                    align : 'center'
+                });
 
-            let text = new PIXI.Text(labelValue.format('HH:mm:ss'),{
-                fontFamily : 'Arial',
-                fontSize: 24,
-                fill : 0x000000,
-                align : 'center'
-            });
-
-
-            let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
-
-            let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
-            text.position.set(x, y)
-            //console.log(x, y)
-            this.labelContainer.addChild(text)
-            i++
-        } while(labelValue.isBefore(toDate) && i <= 20)
-
+                let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
+                let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
+                text.position.set(x, y)
+                //console.log(x, y)
+                this.labelContainer.addChild(text)
+                this.labels[labelValue.unix()] = text
+            }
+        } while(labelValue.isBefore(toDate))
+        //console.log(this.labelContainer.children)
+        //console.log(this.labels)
     }
     clearAllLabels(){
 
