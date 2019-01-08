@@ -8,7 +8,7 @@ export default class Chart {
 
     constructor(settings) {
         this.id = _.uniqueId('chart')
-
+        this.series = []
 
         this.settings = _.merge({
             width: 800,

@@ -12,12 +12,13 @@ export default class Axis {
 
         }, settings)
         this.chart = chart
-        this.labelContainer = new PIXI.Container()
+
         this.init()
         return this
     }
     init(){
         this.graphics = new PIXI.Graphics();
+        this.labelContainer = new PIXI.Container()
         this.chart.pixi.stage.addChild(this.graphics);
         this.chart.pixi.stage.addChild(this.labelContainer);
         //this.redraw()
@@ -39,6 +40,7 @@ export default class Axis {
         //console.log(labelsInterval)
 
         // remove old labels
+        //this.labelContainer.clear()
         this.labelContainer.removeChildren()
 
         let labelValue = moment(fromDate).seconds(0).milliseconds(0)
@@ -61,10 +63,10 @@ export default class Axis {
 
             let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
             text.position.set(x, y)
+            //console.log(x, y)
             this.labelContainer.addChild(text)
             i++
-        } while(labelValue.isBefore(toDate))
-
+        } while(labelValue.isBefore(toDate) && i <= 20)
 
     }
     clearAllLabels(){
