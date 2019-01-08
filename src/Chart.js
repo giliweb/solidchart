@@ -1,21 +1,27 @@
 import _ from 'lodash'
 import Series from "./Series"
 import * as PIXI from 'pixi.js'
+import moment from 'moment'
 import Axis from "./Axis"
 
 export default class Chart {
 
     constructor(settings) {
-
         this.id = _.uniqueId('chart')
+
+
         this.settings = _.merge({
-            width: 1200,
-            height: 900,
-            pause: false
+            width: 800,
+            height: 600,
+            pause: false,
+            currentDateTime: moment(),
+            totalRangeSpan: 60,
+            padding: 10
         }, settings)
         this.pixi = new PIXI.Application({
             width: this.settings.width,
             height: this.settings.height,
+            backgroundColor: 0xFFFFFF,
             antialias: true
         });
         this.init()
@@ -34,12 +40,13 @@ export default class Chart {
         this.createCanvas()
 
         let animate = () => {
-            //Determine the amount of time since last frame update
-            this.series[0].graphics.x -= .3
-            this.series[1].graphics.x -= .3
+            this.settings.currentDateTime = moment()
+            _.forEach(this.series, (s) => {
+                s.redraw()
+            })
+            this.xAxis[0].update()
             this.pixi.renderer.render(this.pixi.stage);
         }
-
 
         // Build a worker from an anonymous function body
         let blobURL = URL.createObjectURL( new Blob([ '(',
@@ -50,7 +57,6 @@ export default class Chart {
                         }, e.data);
                         postMessage({});
                     };
-
                 }.toString(),
                 ')()' ], { type: 'application/javascript' } ) ),
             worker = new Worker( blobURL );
@@ -59,7 +65,6 @@ export default class Chart {
             animate();
         };
 
-        // Won't be needing this anymore
         URL.revokeObjectURL( blobURL );
 
     }

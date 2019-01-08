@@ -26,9 +26,15 @@ export default class Series {
         })
     }
     addPoint(point){
-        let x = this.settings.type === 'time' ? moment(point.x) : point.x
+        let x
+        if(this.settings.type === 'time'){
+            x = moment(point.x)
+        } else {
+            x = point.x
+        }
+
         this.points.push(new Point(x, point.y, this))
-        this.redraw()
+
     }
     redraw(){
         this.graphics.clear()
@@ -39,8 +45,14 @@ export default class Series {
         let chartWidth = this.chart.getWidth()
         let step = chartWidth / this.points.length
 
+        let currentDateTime = this.chart.settings.currentDateTime
+        let totalRangeSpan = this.chart.settings.totalRangeSpan
+        //x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
+
+
         _.forEach(this.points, (p, i) => {
-            let x = dx + p.x + (step * i)
+            let x = -(moment(currentDateTime).diff(moment(p.x)) / (totalRangeSpan * 1000) )  * this.chart.pixi.renderer.width
+            //console.log(x)
             let y = dy + p.y
             this.graphics.lineTo(x, y)
         })
