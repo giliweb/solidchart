@@ -8,7 +8,7 @@ export default class Axis {
             type: 'time',
             min: moment().subtract(60, 'seconds'),
             max: moment(),
-            paddingBottom: 50
+            paddingBottom: 20
 
         }, settings)
         this.chart = chart
@@ -66,11 +66,12 @@ export default class Axis {
                 let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
                 let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
                 this.labels[labelValue.unix()].position.set(x, y)
+                this.labels[labelValue.unix()].axis.position.x = x + (this.labels[labelValue.unix()].width / 2)
             } else {
 
                 let text = new PIXI.Text(labelValue.format('HH:mm:ss'), {
                         fontFamily : 'Arial',
-                        fontSize: 24,
+                        fontSize: 14,
                         fill : 0x000000,
                         align : 'center'
                 });
@@ -88,6 +89,11 @@ export default class Axis {
 
                 this.labelContainer.addChild(text)
 
+                text.axis = new PIXI.Graphics();
+                text.axis.moveTo(0, 0);
+                text.axis.lineStyle(1, 0xbbbbbb, 1);
+                text.axis.lineTo(0, this.chart.pixi.renderer.height - this.settings.paddingBottom - 10)
+                this.labelContainer.addChild(text.axis)
 
             }
 

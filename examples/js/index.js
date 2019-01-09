@@ -17,31 +17,31 @@ for(let i = 0; i<= 60; i++){
     data1.push(
         {
             x: (new Date()).getTime() - 60e3 + (1e3 * i),
-            y: Math.random() * window.innerHeight
+            y: Math.random() * 50
         }
     )
     data2.push(
         {
             x: (new Date()).getTime() - 60e3 + (1e3 * i),
-            y: Math.random() * window.innerHeight
+            y: Math.random() * 50
         }
     )
     data3.push(
         {
             x: (new Date()).getTime() - 60e3 + (1e3 * i),
-            y: Math.random() * window.innerHeight
+            y: Math.random() * 50
         }
     )
     data4.push(
         {
             x: (new Date()).getTime() - 60e3 + (1e3 * i),
-            y: Math.random() * window.innerHeight
+            y: Math.random() * 50
         }
     )
     data5.push(
         {
             x: (new Date()).getTime() - 60e3 + (1e3 * i),
-            y: Math.random() * window.innerHeight
+            y: Math.random() * 50
         }
     )
 
@@ -55,6 +55,9 @@ let c = new SolidChart.Chart({
     xAxis: [
         {}
     ],
+    grid: {
+        unit: 'kW'
+    },
     series: [
         {
             data: data1,
@@ -93,10 +96,10 @@ let c = new SolidChart.Chart({
 })
 console.log(c)
 setInterval(function(){
-    c.series[0].addPoint({x: (new Date()).getTime(), y: Math.random() * window.innerHeight})
-    c.series[1].addPoint({x: (new Date()).getTime(), y: Math.random() * window.innerHeight})
-    c.series[2].addPoint({x: (new Date()).getTime(), y: Math.random() * window.innerHeight})
-    c.series[3].addPoint({x: (new Date()).getTime(), y: Math.random() * window.innerHeight})
-    c.series[4].addPoint({x: (new Date()).getTime(), y: Math.random() * window.innerHeight})
+    c.series[0].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+    c.series[1].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+    c.series[2].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+    c.series[3].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+    c.series[4].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
     ///console.log(c)
 }, 1000)

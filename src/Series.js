@@ -16,8 +16,21 @@ export default class Series {
         return this
     }
     init(){
-        this.graphics = new PIXI.Graphics();
-        this.chart.pixi.stage.addChild(this.graphics);
+        this.graphics = new PIXI.Graphics()
+        this.chart.pixi.stage.addChild(this.graphics)
+
+        let mask = new PIXI.Graphics()
+        this.chart.pixi.stage.addChild(mask)
+        let count = .5
+        mask.x = 50
+        mask.beginFill(0x8bc5ff, 0.4);
+        mask.moveTo(0, 0);
+        mask.lineTo(this.chart.pixi.renderer.width, 0);
+        mask.lineTo(this.chart.pixi.renderer.width, this.chart.pixi.renderer.height);
+        mask.lineTo(0, this.chart.pixi.renderer.height);
+
+        this.graphics.mask = mask;
+
         this.addPoints(this.data)
     }
     addPoints(data){
@@ -26,6 +39,7 @@ export default class Series {
         })
     }
     addPoint(point){
+        this.data.push(point)
         let x
         if(this.settings.type === 'time'){
             x = moment(point.x).add(1, 'seconds')
@@ -59,15 +73,36 @@ export default class Series {
         })
 
         this.points = temp
-
+        let h = this.chart.pixi.renderer.height - 50
+        let max = this.getGlobalMinMax().max
         //console.log(this.points.length)
         _.forEach(this.points, (p, i) => {
             let x = this.chart.pixi.renderer.width - ((moment(currentDateTime).diff(moment(p.x)) / (totalRangeSpan * 1000) )  * this.chart.pixi.renderer.width)
             //console.log(x)
             let y = dy + p.y
-            this.graphics.lineTo(x, y)
+            this.graphics.lineTo(x, (1 - (y / max)) * h)
             this.graphics.lineStyle(1, this.settings.color, 1);
 
         })
+    }
+
+    getMinMax(){
+        let min = Infinity, max = -Infinity
+        _.forEach(this.data, e => {
+            min = Math.min(min, e.y)
+            max = Math.max(max, e.y)
+        })
+        return { min, max }
+    }
+
+    getGlobalMinMax(){
+        let min = Infinity, max = -Infinity
+        _.forEach(this.chart.series, (series) => {
+            _.forEach(series.data, e => {
+                min = Math.min(min, e.y)
+                max = Math.max(max, e.y)
+            })
+        })
+        return { min, max }
     }
 }

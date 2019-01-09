@@ -3,6 +3,7 @@ import Series from "./Series"
 import * as PIXI from 'pixi.js'
 import moment from 'moment'
 import Axis from "./Axis"
+import Grid from "./Grid"
 
 export default class Chart {
 
@@ -37,6 +38,8 @@ export default class Chart {
         if(this.settings.series){
             this.series = this.addSeries(this.settings.series)
         }
+
+        this.grid = new Grid(this.settings.grid, this)
         this.createCanvas()
 
         let animate = () => {
@@ -45,6 +48,7 @@ export default class Chart {
                 s.redraw()
             })
             this.xAxis[0].update()
+            this.grid.update()
             //this.pixi.renderer.render(this.pixi.stage);
         }
 
