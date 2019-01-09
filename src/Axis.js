@@ -21,6 +21,17 @@ export default class Axis {
         this.labelContainer = new PIXI.Container()
         this.chart.pixi.stage.addChild(this.graphics);
         this.chart.pixi.stage.addChild(this.labelContainer);
+
+        let mask = new PIXI.Graphics()
+        this.chart.pixi.stage.addChild(mask)
+        mask.x = 50
+        mask.beginFill(0x8bc5ff, 0.4);
+        mask.moveTo(0, 0);
+        mask.lineTo(this.chart.pixi.renderer.width, 0);
+        mask.lineTo(this.chart.pixi.renderer.width, this.chart.pixi.renderer.height);
+        mask.lineTo(0, this.chart.pixi.renderer.height);
+
+        this.labelContainer.mask = mask;
         //this.redraw()
     }
     redraw(){
