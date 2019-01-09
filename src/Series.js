@@ -22,7 +22,7 @@ export default class Series {
         let mask = new PIXI.Graphics()
         this.chart.pixi.stage.addChild(mask)
         let count = .5
-        mask.x = 50
+        mask.x = 60
         mask.beginFill(0x8bc5ff, 0.4);
         mask.moveTo(0, 0);
         mask.lineTo(this.chart.pixi.renderer.width, 0);
@@ -80,7 +80,7 @@ export default class Series {
             let x = this.chart.pixi.renderer.width - ((moment(currentDateTime).diff(moment(p.x)) / (totalRangeSpan * 1000) )  * this.chart.pixi.renderer.width)
             //console.log(x)
             let y = dy + p.y
-            this.graphics.lineTo(x, (1 - (y / max)) * h)
+            this.graphics.lineTo(x, ((1 - (y / max)) * .99 * h) + (.01 * h))
             this.graphics.lineStyle(1, this.settings.color, 1);
 
         })

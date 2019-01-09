@@ -24,7 +24,7 @@ export default class Axis {
 
         let mask = new PIXI.Graphics()
         this.chart.pixi.stage.addChild(mask)
-        mask.x = 50
+        mask.x = 60
         mask.beginFill(0x8bc5ff, 0.4);
         mask.moveTo(0, 0);
         mask.lineTo(this.chart.pixi.renderer.width, 0);
@@ -68,7 +68,7 @@ export default class Axis {
         })
 //console.log(temp)
         this.labels = temp
-
+        let h = this.chart.pixi.renderer.height - 50
         do {
             labelValue.add(labelsInterval, 'seconds')
 
@@ -101,7 +101,7 @@ export default class Axis {
                 this.labelContainer.addChild(text)
 
                 text.axis = new PIXI.Graphics();
-                text.axis.moveTo(0, 0);
+                text.axis.moveTo(0, (.01 * this.chart.pixi.renderer.height));
                 text.axis.lineStyle(1, 0xbbbbbb, 1);
                 text.axis.lineTo(0, this.chart.pixi.renderer.height - this.settings.paddingBottom - 10)
                 this.labelContainer.addChild(text.axis)
