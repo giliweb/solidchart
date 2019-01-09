@@ -45,7 +45,7 @@ export default class Chart {
                 s.redraw()
             })
             this.xAxis[0].update()
-            this.pixi.renderer.render(this.pixi.stage);
+            //this.pixi.renderer.render(this.pixi.stage);
         }
 
         // Build a worker from an anonymous function body

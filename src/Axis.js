@@ -46,42 +46,53 @@ export default class Axis {
         let labelValue = moment(fromDate).seconds(0).milliseconds(0)
 
 
+        let temp = {}
         _.forOwn(this.labels, (label, i) => {
-            if(moment(i, 'X').isBefore(moment(currentDateTime).subtract(totalRangeSpan, 'seconds'))){
+            //console.log(label)
+            if(label.value.isAfter(moment(currentDateTime).subtract(totalRangeSpan, 'seconds'))){
+                temp[i] = label
+            } else {
                 this.labelContainer.removeChild(label)
-                delete this.labels[i]
             }
         })
+//console.log(temp)
+        this.labels = temp
 
         do {
             labelValue.add(labelsInterval, 'seconds')
+
+
             if(this.labels[labelValue.unix()]){ // this label already exists
                 let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
                 let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
                 this.labels[labelValue.unix()].position.set(x, y)
             } else {
-                let text = new PIXI.Text(labelValue.format('HH:mm:ss'),{
-                    fontFamily : 'Arial',
-                    fontSize: 24,
-                    fill : 0x000000,
-                    align : 'center'
+
+                let text = new PIXI.Text(labelValue.format('HH:mm:ss'), {
+                        fontFamily : 'Arial',
+                        fontSize: 24,
+                        fill : 0x000000,
+                        align : 'center'
                 });
+                text.value = labelValue
+
+
+                this.labels[labelValue.unix()] = text
+
 
                 let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
                 let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
                 text.position.set(x, y)
+                text.cacheAsBitmap = true
                 //console.log(x, y)
+
                 this.labelContainer.addChild(text)
-                this.labels[labelValue.unix()] = text
+
+
             }
+
         } while(labelValue.isBefore(toDate))
         //console.log(this.labelContainer.children)
         //console.log(this.labels)
-    }
-    clearAllLabels(){
-
-    }
-    getLabels(){
-        let text = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
     }
 }
