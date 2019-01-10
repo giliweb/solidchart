@@ -40,7 +40,7 @@ export default class Grid {
             roundedMin = Math.round(min / this.settings.step) * this.settings.step
             roundedMax = (Math.round(Math.ceil(max) / this.settings.step) * this.settings.step) + this.settings.step
 
-            console.log(min, roundedMin, max, roundedMax)
+            //console.log(min, roundedMin, max, roundedMax)
 
 
             let i = roundedMin
