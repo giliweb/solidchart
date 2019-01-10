@@ -33,6 +33,7 @@ export default class Draggable {
 
         this.onDragEnd = (event) => {
             _this.dragging = false;
+            _this.chart.onDragEnd()
         }
 
         this.chart.pixi.stage.interactive = true

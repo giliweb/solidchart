@@ -67,7 +67,10 @@ export default class Series {
         let temp = []
 
         _.forEach(this.points, (p, i) => {
-            if(moment(p.x).isAfter(moment(currentDateTime).subtract(totalRangeSpan, 'seconds').subtract(padding, 'seconds'))){
+            if(
+                moment(p.x).isAfter(moment(currentDateTime).subtract(totalRangeSpan, 'seconds').subtract(padding, 'seconds')) &&
+                moment(p.x).isBefore(this.chart.getCurrentDateTime().add(padding, 'seconds'))
+            ){
                 temp.push(p)
             }
         })
@@ -104,5 +107,25 @@ export default class Series {
             })
         })
         return { min, max }
+    }
+
+    getOldestPoint(){
+        let oldestPoint = this.data[0]
+        _.forEach(this.data, e => {
+            if(e.x < oldestPoint){
+                oldestPoint = e
+            }
+        })
+        return oldestPoint
+    }
+
+    getLatestPoint(){
+        let latestPoint = this.data[0]
+        _.forEach(this.data, e => {
+            if(e.x < latestPoint){
+                latestPoint = e
+            }
+        })
+        return latestPoint
     }
 }

@@ -22,7 +22,13 @@ export default class Chart {
             padding: 10,
             paused: false,
             pausedAt: null,
-            draggable: true
+            draggable: true,
+            isLoading: false,
+            websocket: null,
+            resolution: 1,
+            loadData: (series) => {
+
+            }
         }, settings)
         this.pixi = new PIXI.Application({
             width: this.settings.width,
@@ -116,7 +122,10 @@ export default class Chart {
         return this.settings.paused
     }
     setCurrentDateTime(dt){
-        if(dt.isAfter(this.settings.pausedAt)) return
+        if(dt.isAfter(this.settings.pausedAt)) {
+            this.pause(false)
+            return
+        }
         this.settings.currentDateTime = dt
     }
     getCurrentDateTime(){
@@ -129,5 +138,22 @@ export default class Chart {
         if(range < 30 || range > (60 * 10)) return
         this.settings.totalRangeSpan = range
         this.xAxis[0].resetLabels()
+    }
+    onDragEnd(){
+        let incompleteDataSeries = []
+        _.forEach(this.series, (series, i) => {
+            let oldestPoint = series.getOldestPoint()
+            if(moment(oldestPoint.x).isAfter(this.getCurrentDateTime().subtract(this.getTotalRangeSpan(), 'seconds'))){
+                //console.log('data is missing for series ' + i)
+                incompleteDataSeries.push(series)
+            }
+        })
+        if(incompleteDataSeries.length > 0){
+            this.onDataMissing(incompleteDataSeries)
+        }
+    }
+    async onDataMissing(series){
+        let missingData = await this.settings.loadData(series, this.getCurrentDateTime().subtract(this.getTotalRangeSpan(), 'seconds'), this.getCurrentDateTime(), this.settings.resolution)
+        console.log(missingData)
     }
 }
