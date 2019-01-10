@@ -5,6 +5,7 @@ import moment from 'moment'
 import Axis from "./Axis"
 import Grid from "./Grid"
 import Draggable from "./Draggable"
+import Zoomable from "./Zoomable"
 
 export default class Chart {
 
@@ -20,6 +21,7 @@ export default class Chart {
             totalRangeSpan: 60,
             padding: 10,
             paused: false,
+            pausedAt: null,
             draggable: true
         }, settings)
         this.pixi = new PIXI.Application({
@@ -44,6 +46,7 @@ export default class Chart {
 
         this.grid = new Grid(this.settings.grid, this)
         this.draggable = new Draggable({}, this)
+        this.zoomable = new Zoomable({}, this)
         this.createCanvas()
 
         let animate = () => {
@@ -102,12 +105,29 @@ export default class Chart {
     }
     pause(e){
         this.settings.paused = e
+        if(e){
+            this.settings.pausedAt = moment()
+        } else {
+            this.settings.pausedAt = null
+        }
         //this.settings.currentDateTime = moment().subtract(5, 'seconds')
     }
+    isPaused(){
+        return this.settings.paused
+    }
     setCurrentDateTime(dt){
+        if(dt.isAfter(this.settings.pausedAt)) return
         this.settings.currentDateTime = dt
     }
     getCurrentDateTime(){
         return moment(this.settings.currentDateTime)
+    }
+    getTotalRangeSpan(){
+        return this.settings.totalRangeSpan
+    }
+    setTotalRangeSpan(range){
+        if(range < 30 || range > (60 * 10)) return
+        this.settings.totalRangeSpan = range
+        this.xAxis[0].resetLabels()
     }
 }

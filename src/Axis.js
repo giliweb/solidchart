@@ -116,4 +116,9 @@ export default class Axis {
         //console.log(this.labelContainer.children)
         //console.log(this.labels)
     }
+
+    resetLabels(){
+        this.labelContainer.removeChildren()
+        this.labels = []
+    }
 }

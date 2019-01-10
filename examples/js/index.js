@@ -97,11 +97,14 @@ let c = new SolidChart.Chart({
 console.log(c)
 var i = 0
 setInterval(function(){
-    c.series[0].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
-    c.series[1].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
-    c.series[2].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
-    c.series[3].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
-    c.series[4].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+    if(!c.isPaused()){
+        c.series[0].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+        c.series[1].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+        c.series[2].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+        c.series[3].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+        c.series[4].addPoint({x: (new Date()).getTime(), y: Math.random() * 100})
+    }
+
     /*
     i++
     if(i > 5){

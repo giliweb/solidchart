@@ -25,7 +25,7 @@ export default class Draggable {
         }
 
         this.onDragStart = (event) => {
-            _this.chart.pause(true)
+            _this.chart.isPaused() || _this.chart.pause(true)
             _this.dragging = true;
             _this.fromX = event.data.global.x
             _this.dragTime = this.chart.getCurrentDateTime()
