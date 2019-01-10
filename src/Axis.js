@@ -60,10 +60,14 @@ export default class Axis {
         let temp = {}
         _.forOwn(this.labels, (label, i) => {
             //console.log(label)
-            if(label.value.isAfter(moment(currentDateTime).subtract(totalRangeSpan, 'seconds'))){
+            if(
+                label.value.isAfter(moment(currentDateTime).subtract(totalRangeSpan, 'seconds')) &&
+                label.value.isBefore(moment(currentDateTime).add(padding + 10, 'seconds'))
+            ){
                 temp[i] = label
             } else {
                 this.labelContainer.removeChild(label)
+                this.labelContainer.removeChild(label.axis)
             }
         })
 //console.log(temp)
