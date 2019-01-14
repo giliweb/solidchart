@@ -34,12 +34,15 @@ export default class Chart {
             width: this.settings.width,
             height: this.settings.height,
             backgroundColor: 0xFFFFFF,
-            antialias: true
+            antialias: true,
+            autoResize: true,
+            resolution: devicePixelRatio
         });
         this.init()
         return this
     }
     init(){
+        this.settings.container.appendChild(this.pixi.view)
         // initiate x Axis
         if(this.settings.xAxis){
             this.xAxis = this.addXAxis(this.settings.xAxis)
@@ -53,7 +56,7 @@ export default class Chart {
         this.grid = new Grid(this.settings.grid, this)
         this.draggable = new Draggable({}, this)
         this.zoomable = new Zoomable({}, this)
-        this.createCanvas()
+        //this.createCanvas()
 
         let animate = () => {
             if(!this.settings.paused){
@@ -86,6 +89,20 @@ export default class Chart {
         };
 
         URL.revokeObjectURL( blobURL );
+
+        window.onresize = (event) => {
+            console.log(event)
+            // Get the p
+            const parent = this.pixi.view.parentNode;
+
+            // Resize the renderer
+            this.pixi.renderer.resize(parent.clientWidth, parent.clientHeight);
+
+            // You can use the 'screen' property as the renderer visible
+            // area, this is more useful than view.width/height because
+            // it handles resolution
+            this.pixi.position.set(this.pixi.screen.width, this.pixi.screen.height);
+        }
 
     }
     addSeries(series){
@@ -123,7 +140,7 @@ export default class Chart {
     }
     setCurrentDateTime(dt){
         if(dt.isAfter(this.settings.pausedAt)) {
-            this.pause(false)
+            //this.pause(false)
             return
         }
         this.settings.currentDateTime = dt

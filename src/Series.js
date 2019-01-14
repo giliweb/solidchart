@@ -25,9 +25,9 @@ export default class Series {
         mask.x = 60
         mask.beginFill(0x8bc5ff, 0.4);
         mask.moveTo(0, 0);
-        mask.lineTo(this.chart.pixi.renderer.width, 0);
-        mask.lineTo(this.chart.pixi.renderer.width, this.chart.pixi.renderer.height);
-        mask.lineTo(0, this.chart.pixi.renderer.height);
+        mask.lineTo(this.chart.pixi.screen.width, 0);
+        mask.lineTo(this.chart.pixi.screen.width, this.chart.pixi.screen.height);
+        mask.lineTo(0, this.chart.pixi.screen.height);
 
         this.graphics.mask = mask;
 
@@ -76,11 +76,11 @@ export default class Series {
         })
 
         this.points = temp
-        let h = this.chart.pixi.renderer.height - 50
+        let h = this.chart.pixi.screen.height - 50
         let max = this.getGlobalMinMax().max
         //console.log(this.points.length)
         _.forEach(this.points, (p, i) => {
-            let x = this.chart.pixi.renderer.width - ((moment(currentDateTime).diff(moment(p.x)) / (totalRangeSpan * 1000) )  * this.chart.pixi.renderer.width)
+            let x = this.chart.pixi.screen.width - ((moment(currentDateTime).diff(moment(p.x)) / (totalRangeSpan * 1000) )  * this.chart.pixi.screen.width)
             //console.log(x)
             let y = dy + p.y
             this.graphics.lineTo(x, ((1 - (y / max)) * .99 * h) + (.01 * h))

@@ -27,18 +27,18 @@ export default class Axis {
         mask.x = 60
         mask.beginFill(0x8bc5ff, 0.4);
         mask.moveTo(0, 0);
-        mask.lineTo(this.chart.pixi.renderer.width, 0);
-        mask.lineTo(this.chart.pixi.renderer.width, this.chart.pixi.renderer.height);
-        mask.lineTo(0, this.chart.pixi.renderer.height);
+        mask.lineTo(this.chart.pixi.screen.width, 0);
+        mask.lineTo(this.chart.pixi.screen.width, this.chart.pixi.screen.height);
+        mask.lineTo(0, this.chart.pixi.screen.height);
 
         this.labelContainer.mask = mask;
         //this.redraw()
     }
     redraw(){
         this.graphics.clear()
-        this.graphics.moveTo(0, this.chart.pixi.renderer.height - this.settings.paddingBottom);
+        this.graphics.moveTo(0, this.chart.pixi.screen.height - this.settings.paddingBottom);
         this.graphics.lineStyle(1, 0x000000, 1);
-        this.graphics.lineTo(this.chart.pixi.renderer.width, this.chart.pixi.renderer.height - this.settings.paddingBottom)
+        this.graphics.lineTo(this.chart.pixi.screen.width, this.chart.pixi.screen.height - this.settings.paddingBottom)
     }
     update(){
         let currentDateTime = this.chart.settings.currentDateTime
@@ -72,14 +72,14 @@ export default class Axis {
         })
 //console.log(temp)
         this.labels = temp
-        let h = this.chart.pixi.renderer.height - 50
+        let h = this.chart.pixi.screen.height - 50
         do {
             labelValue.add(labelsInterval, 'seconds')
 
 
             if(this.labels[labelValue.unix()]){ // this label already exists
-                let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
-                let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
+                let x = this.chart.pixi.screen.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.screen.width)
+                let y = this.chart.pixi.screen.height - this.settings.paddingBottom
                 this.labels[labelValue.unix()].position.set(x, y)
                 this.labels[labelValue.unix()].axis.position.x = x + (this.labels[labelValue.unix()].width / 2)
             } else {
@@ -96,8 +96,8 @@ export default class Axis {
                 this.labels[labelValue.unix()] = text
 
 
-                let x = this.chart.pixi.renderer.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.renderer.width)
-                let y = this.chart.pixi.renderer.height - this.settings.paddingBottom
+                let x = this.chart.pixi.screen.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.screen.width)
+                let y = this.chart.pixi.screen.height - this.settings.paddingBottom
                 text.position.set(x, y)
                 text.cacheAsBitmap = true
                 //console.log(x, y)
@@ -105,9 +105,9 @@ export default class Axis {
                 this.labelContainer.addChild(text)
 
                 text.axis = new PIXI.Graphics();
-                text.axis.moveTo(0, (.01 * this.chart.pixi.renderer.height));
+                text.axis.moveTo(0, (.01 * this.chart.pixi.screen.height));
                 text.axis.lineStyle(1, 0xbbbbbb, 1);
-                text.axis.lineTo(0, this.chart.pixi.renderer.height - this.settings.paddingBottom - 10)
+                text.axis.lineTo(0, this.chart.pixi.screen.height - this.settings.paddingBottom - 10)
                 this.labelContainer.addChild(text.axis)
 
             }

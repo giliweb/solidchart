@@ -45,13 +45,13 @@ export default class Grid {
 
             let i = roundedMin
 
-            let h = this.chart.pixi.renderer.height - 50
+            let h = this.chart.pixi.screen.height - 50
             do {
 
                 let y = (1 - ( i / roundedMax * .99 ) ) * h
                 this.graphics.moveTo(60, y);
                 this.graphics.lineStyle(.5, 0x999999, 1);
-                this.graphics.lineTo(this.chart.pixi.renderer.width, y)
+                this.graphics.lineTo(this.chart.pixi.screen.width, y)
 
                 let text = new PIXI.Text(i + " " + this.settings.unit, {
                     fontFamily : 'Arial',
@@ -72,9 +72,9 @@ export default class Grid {
             this.graphics.lineStyle(.5, 0x999999, 1);
             this.graphics.lineTo(60, .01 * h)
 
-            this.graphics.moveTo(this.chart.pixi.renderer.width, h);
+            this.graphics.moveTo(this.chart.pixi.screen.width, h);
             this.graphics.lineStyle(.5, 0x999999, 1);
-            this.graphics.lineTo(this.chart.pixi.renderer.width, .01 * h)
+            this.graphics.lineTo(this.chart.pixi.screen.width, .01 * h)
 
         }
 
