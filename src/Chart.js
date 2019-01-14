@@ -66,7 +66,7 @@ export default class Chart {
             _.forEach(this.series, (s) => {
                 s.redraw()
             })
-            this.xAxis[0].update()
+            //this.xAxis[0].update()
             this.grid.update()
             //this.pixi.renderer.render(this.pixi.stage);
         }
