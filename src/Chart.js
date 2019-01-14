@@ -89,25 +89,26 @@ export default class Chart {
         };
 
         URL.revokeObjectURL( blobURL );
+        let _this = this
+        this.resize = () => {
 
+            // Get the p
+            const parent = _this.pixi.view.parentNode;
+
+            // Resize the renderer
+            _this.pixi.renderer.resize(parent.clientWidth, parent.clientHeight);
+
+            // You can use the 'screen' property as the renderer visible
+            // area, this is more useful than view.width/height because
+            // it handles resolution
+            _this.pixi.position.set(_this.pixi.screen.width, _this.pixi.screen.height);
+
+        }
         window.onresize = this.resize
         this.resize()
 
     }
-    resize(){
 
-        // Get the p
-        const parent = this.pixi.view.parentNode;
-
-        // Resize the renderer
-        this.pixi.renderer.resize(parent.clientWidth, parent.clientHeight);
-
-        // You can use the 'screen' property as the renderer visible
-        // area, this is more useful than view.width/height because
-        // it handles resolution
-        this.pixi.position.set(this.pixi.screen.width, this.pixi.screen.height);
-
-    }
     addSeries(series){
         return _.map(series, (s) => {
             return new Series(s.data, s.settings, this)
