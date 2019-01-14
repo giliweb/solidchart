@@ -90,19 +90,22 @@ export default class Chart {
 
         URL.revokeObjectURL( blobURL );
 
-        window.onresize = (event) => {
-            console.log(event)
-            // Get the p
-            const parent = this.pixi.view.parentNode;
+        window.onresize = this.resize
+        this.resize()
 
-            // Resize the renderer
-            this.pixi.renderer.resize(parent.clientWidth, parent.clientHeight);
+    }
+    resize(){
 
-            // You can use the 'screen' property as the renderer visible
-            // area, this is more useful than view.width/height because
-            // it handles resolution
-            this.pixi.position.set(this.pixi.screen.width, this.pixi.screen.height);
-        }
+        // Get the p
+        const parent = this.pixi.view.parentNode;
+
+        // Resize the renderer
+        this.pixi.renderer.resize(parent.clientWidth, parent.clientHeight);
+
+        // You can use the 'screen' property as the renderer visible
+        // area, this is more useful than view.width/height because
+        // it handles resolution
+        this.pixi.position.set(this.pixi.screen.width, this.pixi.screen.height);
 
     }
     addSeries(series){
