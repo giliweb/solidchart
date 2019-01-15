@@ -66,7 +66,7 @@ export default class Chart {
             _.forEach(this.series, (s) => {
                 s.redraw()
             })
-            //this.xAxis[0].update()
+            this.xAxis[0].update()
             this.grid.update()
             //this.pixi.renderer.render(this.pixi.stage);
         }
@@ -91,18 +91,11 @@ export default class Chart {
         URL.revokeObjectURL( blobURL );
         let _this = this
         this.resize = () => {
-
             // Get the p
             const parent = _this.pixi.view.parentNode;
 
             // Resize the renderer
             _this.pixi.renderer.resize(parent.clientWidth, parent.clientHeight);
-
-            // You can use the 'screen' property as the renderer visible
-            // area, this is more useful than view.width/height because
-            // it handles resolution
-            //_this.pixi.position.set(_this.pixi.screen.width, _this.pixi.screen.height);
-
         }
         window.onresize = this.resize
         this.resize()

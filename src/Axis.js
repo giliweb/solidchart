@@ -75,8 +75,6 @@ export default class Axis {
         let h = this.chart.pixi.screen.height - 50
         do {
             labelValue.add(labelsInterval, 'seconds')
-
-
             if(this.labels[labelValue.unix()]){ // this label already exists
                 let x = this.chart.pixi.screen.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.screen.width)
                 let y = this.chart.pixi.screen.height - this.settings.paddingBottom
@@ -92,9 +90,7 @@ export default class Axis {
                 });
                 text.value = labelValue
 
-
                 this.labels[labelValue.unix()] = text
-
 
                 let x = this.chart.pixi.screen.width - (((moment(currentDateTime).add(padding * 2, 'seconds').diff(labelValue)) / (totalRangeSpan * 1000)) * this.chart.pixi.screen.width)
                 let y = this.chart.pixi.screen.height - this.settings.paddingBottom
