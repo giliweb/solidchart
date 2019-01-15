@@ -50,8 +50,8 @@ console.log(data1)
 
 let c = new SolidChart.Chart({
     container: document.getElementById('container'),
-    width: window.innerWidth - 10,
-    height: window.innerHeight - 10,
+    //width: window.innerWidth - 10,
+    //height: window.innerHeight - 10,
     xAxis: [
         {}
     ],

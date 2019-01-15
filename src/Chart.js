@@ -14,8 +14,6 @@ export default class Chart {
         this.series = []
 
         this.settings = _.merge({
-            width: 800,
-            height: 600,
             pause: false,
             currentDateTime: moment(),
             totalRangeSpan: 60,
@@ -31,8 +29,8 @@ export default class Chart {
             }
         }, settings)
         this.pixi = new PIXI.Application({
-            width: this.settings.width,
-            height: this.settings.height,
+            width: this.settings.container.clientWidth,
+            height: this.settings.container.clientHeight,
             backgroundColor: 0xFFFFFF,
             antialias: true,
             autoResize: true,
